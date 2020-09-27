@@ -1,1 +1,2 @@
-# w-wallet
+** FLUTTER APP PROJECT **
+* E-WALLET *
