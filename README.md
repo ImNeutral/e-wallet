@@ -4,5 +4,5 @@
 
 **Specifications:**
 
--The user should be able to register
--The user should be able to login after successful registration via email and password
+-The user should be able to register-
+-The user should be able to login after successful registration via email and password-
