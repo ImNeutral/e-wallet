@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_wallet/model/User.dart';
+import 'package:e_wallet/models/User.dart';
 
-class UserService {
+class UserProvider {
   final FirebaseFirestore _db =  FirebaseFirestore.instance;
 
   // Future<User> getUser(String id) async {

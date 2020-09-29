@@ -1,5 +1,5 @@
-import 'package:e_wallet/model/User.dart';
-import 'package:e_wallet/service/UserService.dart';
+import 'package:e_wallet/models/User.dart';
+import 'package:e_wallet/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final UserService userService = new UserService();
+  final UserProvider userProvider = new UserProvider();
 
   // StreamProvider<List<User>>.value(value: userService.streamAllUsers(),);
   // runApp(MyApp());
   runApp(MultiProvider(
     providers: [
       StreamProvider<List<User>>.value(
-        value: userService.streamAllUsers(),
+        value: userProvider.streamAllUsers(),
       ),
     ],
     child: MyApp(),
