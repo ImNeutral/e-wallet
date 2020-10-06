@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class AuthBackgroundPainter extends CustomPainter {
@@ -20,7 +18,8 @@ class AuthBackgroundPainter extends CustomPainter {
     // paint a curve from current position to the middle of the screen
     ovalPath.quadraticBezierTo(0, 0, 0, 0);
     // paint a curve from current position to the bottom left of the screen
-    ovalPath.quadraticBezierTo(width * 0.6, height * 0.8, width * 0.1, height * 0.5);
+    ovalPath.quadraticBezierTo(
+        width * 0.6, height * 0.8, width * 0.1, height * 0.5);
 
     ovalPath.lineTo(0, height);
     ovalPath.close();
@@ -32,5 +31,4 @@ class AuthBackgroundPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return oldDelegate != this;
   }
-
 }

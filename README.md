@@ -4,11 +4,11 @@
 
 **Specifications:**
 
-- [ ] The user should be able to register
-  - [ ] Username
+- [X] The user should be able to register
+  - [X] Username
   - [ ] Password (Min length of 6, should contain numbers and letters)
   - [ ] First and Last Name
-  - [ ] Email (in email format)
+  - [X] Email (in email format)
 - [ ] The user should be able to login after successful registration via email and password
 - [ ] Upon login, the user should be able to see a dashboard on the first page
   - [ ] Current balance of the wallet
