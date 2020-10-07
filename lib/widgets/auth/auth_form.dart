@@ -11,8 +11,10 @@ class _AuthFormState extends State<AuthForm> {
   UserValidator userValidator = UserValidator();
   final _formKey = GlobalKey<FormState>();
   bool isRegistration = false;
+  bool isLoading = false;
 
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -41,11 +43,19 @@ class _AuthFormState extends State<AuthForm> {
                         style: TextStyle(fontSize: 20),
                       ),
                       TextFormField(
-                        controller: _nameController,
+                        controller: _firstNameController,
                         keyboardType: TextInputType.text,
-                        decoration: InputDecoration(labelText: 'Name'),
+                        decoration: InputDecoration(labelText: 'First Name'),
                         validator: (value) {
-                          return userValidator.name(value);
+                          return userValidator.firstName(value);
+                        },
+                      ),
+                      TextFormField(
+                        controller: _lastNameController,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(labelText: 'Last Name'),
+                        validator: (value) {
+                          return userValidator.lastName(value);
                         },
                       )
                     ],
@@ -58,19 +68,30 @@ class _AuthFormState extends State<AuthForm> {
                       },
                     ),
                     TextFormField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          return userValidator.password(value, isRegistration);
+                        }),
+                    if (isRegistration) ...[
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          return userValidator.confirmPassword(
+                              value, _passwordController.text);
+                        },
                       ),
-                      obscureText: true,
-                      validator: (value) {
-                        return userValidator.password(value, isRegistration);
-                      },
-                    ),
+                    ],
                     SizedBox(
                       height: 12,
                     ),
-                    if (!isRegistration) ...[
+                    if (!isLoading && !isRegistration) ...[
                       RaisedButton(
                         onPressed: () => login(context),
                         child: Text('Login'),
@@ -85,7 +106,7 @@ class _AuthFormState extends State<AuthForm> {
                         textTheme: ButtonTextTheme.primary,
                       )
                     ],
-                    if (isRegistration) ...[
+                    if (!isLoading && isRegistration) ...[
                       RaisedButton(
                         onPressed: () => register(context),
                         child: Text('Register'),
@@ -99,7 +120,8 @@ class _AuthFormState extends State<AuthForm> {
                         child: Text('Already have an account? Log in!'),
                         textTheme: ButtonTextTheme.primary,
                       )
-                    ]
+                    ],
+                    if (isLoading) ...[CircularProgressIndicator()]
                   ],
                 ),
               ),
@@ -110,19 +132,34 @@ class _AuthFormState extends State<AuthForm> {
 
   void register(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      AuthProvider().register(
-        _nameController.text,
-        _emailController.text,
-        _passwordController.text,
-        context,
-      );
+      setIsLoading(true);
+      AuthProvider()
+          .register(
+            _firstNameController.text,
+            _lastNameController.text,
+            _emailController.text,
+            _passwordController.text,
+            context,
+          )
+          .whenComplete(() => setIsLoading(false));
     }
   }
 
-  void login(BuildContext context) {
+  void login(BuildContext context) async {
     if (_formKey.currentState.validate()) {
+      setIsLoading(true);
       AuthProvider()
-          .login(_emailController.text, _passwordController.text, context);
+          .login(_emailController.text, _passwordController.text, context)
+          .whenComplete(() => setIsLoading(false));
     }
+  }
+
+  void setIsLoading(bool _isLoading) {
+    if (mounted) {
+      setState(() {
+        isLoading = _isLoading;
+      });
+    }
+    ;
   }
 }

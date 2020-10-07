@@ -1,5 +1,4 @@
 import 'package:e_wallet/providers/auth_provider.dart';
-import 'package:e_wallet/widgets/auth/background.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

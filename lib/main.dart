@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User>(context);
-    var isLoggedIn = user != null;
+    var isLoggedIn = user != null && user.emailVerified;
 
     return MaterialApp(
       title: 'Flutter Start',
