@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_wallet/models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserProvider {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Future<User> getUser(String id) async {
@@ -22,5 +24,9 @@ class UserProvider {
     var ref = _db.collection('users');
     return ref.snapshots().map((usersSnap) =>
         usersSnap.docs.map((doc) => UserModel.fromFirestore(doc)).toList());
+  }
+
+  Stream<UserModel> currentUser() {
+    return streamUser(_auth.currentUser.uid);
   }
 }

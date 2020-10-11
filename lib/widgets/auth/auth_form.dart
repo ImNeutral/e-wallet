@@ -160,6 +160,5 @@ class _AuthFormState extends State<AuthForm> {
         isLoading = _isLoading;
       });
     }
-    ;
   }
 }

@@ -9,7 +9,7 @@
   - [X] Password (Min length of 6, should contain numbers and letters)
   - [X] First and Last Name
   - [X] Email (in email format)
-- [ ] The user should be able to login after successful registration via email and password
+- [X] The user should be able to login after successful registration via email and password
 - [ ] Upon login, the user should be able to see a dashboard on the first page
   - [ ] Current balance of the wallet
   - [ ] Option to add amount to the balance

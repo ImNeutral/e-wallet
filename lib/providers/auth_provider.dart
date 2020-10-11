@@ -43,10 +43,11 @@ class AuthProvider {
                 'Account created successfully, please verify your email to be able to login.')));
         logout();
       }
-      await _db
-          .collection('users')
-          .doc(user.uid)
-          .set({'first_name': _firstName, 'last_name': _lastName});
+      await _db.collection('users').doc(user.uid).set({
+        'first_name': _firstName,
+        'last_name': _lastName,
+        'email': _email,
+      });
     } catch (e) {
       FirebaseAuthException error = e;
       Scaffold.of(context).showSnackBar(SnackBar(content: Text(error.message)));

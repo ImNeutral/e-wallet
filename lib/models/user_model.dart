@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
+  final String id;
   final String firstName;
   final String lastName;
-  final String id;
+  final String email;
+  final double balance;
 
-  UserModel({this.firstName, this.lastName, this.id});
+  UserModel({this.id, this.firstName, this.lastName, this.email, this.balance});
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
-
+    var _balance = data['balance'] ?? 0;
     return UserModel(
+      id: doc.id,
       firstName: data['first_name'] ?? '',
       lastName: data['last_name'] ?? '',
-      id: doc.id,
+      email: data['email'] ?? '',
+      balance: _balance / 1.0,
     );
   }
 }
