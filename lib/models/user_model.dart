@@ -5,7 +5,7 @@ class UserModel {
   final String firstName;
   final String lastName;
   final String email;
-  final double balance;
+  final int balance;
 
   UserModel({this.id, this.firstName, this.lastName, this.email, this.balance});
 
@@ -17,7 +17,7 @@ class UserModel {
       firstName: data['first_name'] ?? '',
       lastName: data['last_name'] ?? '',
       email: data['email'] ?? '',
-      balance: _balance / 1.0,
+      balance: _balance,
     );
   }
 }

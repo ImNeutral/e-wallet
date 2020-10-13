@@ -1,13 +1,13 @@
 import 'package:e_wallet/models/user_model.dart';
-import 'package:e_wallet/providers/user_provider.dart';
+import 'package:e_wallet/util/custom_number_format_util.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CurrentBalance extends StatelessWidget {
-  final oCcy = new NumberFormat("#,##0.00", "en_US");
-
   @override
   Widget build(BuildContext context) {
+    UserModel user = Provider.of<UserModel>(context);
+
     return Center(
       child: new AspectRatio(
         aspectRatio: 100 / 25,
@@ -30,26 +30,19 @@ class CurrentBalance extends StatelessWidget {
                               .bodyText1
                               .color),
                     ),
-                    StreamBuilder<UserModel>(
-                      stream: UserProvider().currentUser(),
-                      builder: (context, snapshot) {
-                        var user = snapshot.data;
-                        if (user != null) {
-                          return Text(
-                            oCcy.format(user.balance),
-                            style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .primaryTextTheme
-                                    .bodyText1
-                                    .color),
-                          );
-                        } else {
-                          return Text('0');
-                        }
-                      },
-                    ),
+                    if (user != null) ...[
+                      Text(
+                        CustomNumberFormatUtil()
+                            .formatIntAsCurrency(user.balance),
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context)
+                                .primaryTextTheme
+                                .bodyText1
+                                .color),
+                      ),
+                    ],
                   ],
                 ),
                 Container(

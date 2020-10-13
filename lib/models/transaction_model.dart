@@ -4,10 +4,18 @@ class TransactionModel {
   final String id;
   final String from;
   final String to;
-  final double amount;
+  final int amount;
   final Timestamp dateAdded;
+  final String description;
 
-  TransactionModel({this.id, this.from, this.to, this.amount, this.dateAdded});
+  TransactionModel({
+    this.id,
+    this.from,
+    this.to,
+    this.amount,
+    this.dateAdded,
+    this.description,
+  });
 
   factory TransactionModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
@@ -16,8 +24,9 @@ class TransactionModel {
       id: doc.id,
       from: data['from'] ?? '',
       to: data['to'] ?? '',
-      amount: _amount / 1.0,
+      amount: _amount,
       dateAdded: data['date_added'],
+      description: data['description'],
     );
   }
 }

@@ -1,6 +1,4 @@
-import 'package:e_wallet/models/transaction_model.dart';
 import 'package:e_wallet/models/user_model.dart';
-import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/providers/user_provider.dart';
 import 'package:e_wallet/screens/add_balance_screen.dart';
 import 'package:e_wallet/screens/auth_screen.dart';
@@ -14,7 +12,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final UserProvider userService = new UserProvider();
-  final TransactionProvider transactionProvider = new TransactionProvider();
+  //final TransactionProvider transactionProvider = new TransactionProvider();
 
   runApp(MultiProvider(
     providers: [
@@ -24,9 +22,9 @@ void main() async {
       StreamProvider<User>.value(
         value: FirebaseAuth.instance.authStateChanges(),
       ),
-      // StreamProvider<UserModel>.value(
-      //   value: userService.streamUser('Qw0YNjseGjMWJw0AOx9t'),
-      // ),
+      StreamProvider<UserModel>.value(
+        value: UserProvider().currentUser(),
+      )
     ],
     child: MyApp(),
   ));

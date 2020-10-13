@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_wallet/util/global_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,12 @@ class AuthProvider {
       );
       User user = userCreds.user;
       if (user != null && !user.emailVerified) {
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text('Please verify your email first.')));
+        Show(context, 'Please verify your email first.');
         logout();
       }
     } catch (e) {
       FirebaseAuthException error = e;
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      Show(context, error.message);
     }
   }
 
@@ -38,19 +38,19 @@ class AuthProvider {
       User user = userCreds.user;
       if (user != null) {
         user.sendEmailVerification();
-        Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(
-                'Account created successfully, please verify your email to be able to login.')));
+        Show(context,
+            'Account created successfully, please verify your email to be able to login.');
         logout();
       }
       await _db.collection('users').doc(user.uid).set({
         'first_name': _firstName,
         'last_name': _lastName,
         'email': _email,
+        'balance': 0,
       });
     } catch (e) {
       FirebaseAuthException error = e;
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      Show(context, error.message);
     }
   }
 

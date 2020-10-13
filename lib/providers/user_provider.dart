@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_wallet/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,6 +30,17 @@ class UserProvider {
   }
 
   Stream<UserModel> currentUser() {
-    return streamUser(_auth.currentUser.uid);
+    if (_auth.currentUser != null) {
+      return streamUser(_auth.currentUser.uid);
+    }
+    return null;
+  }
+
+  Future addBalance(UserModel user, int balance) async {
+    try {
+      await _db.collection('users').doc(_auth.currentUser.uid).set({
+        'balance': user.balance + balance,
+      });
+    } catch (e) {}
   }
 }
