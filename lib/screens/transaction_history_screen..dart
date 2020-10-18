@@ -17,7 +17,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         elevation: 0,
       ),
       body: Builder(builder: (context) {
-        return ListTransactions(10);
+        return ListTransactions(0);
       }),
     );
   }

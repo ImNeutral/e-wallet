@@ -3,6 +3,7 @@ import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/util/custom_format_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListTransactions extends StatefulWidget {
   final int size;
@@ -34,12 +35,6 @@ class _ListTransactionsState extends State<ListTransactions> {
   @override
   Widget build(BuildContext context) {
     // Provider.of<TransactionProvider>(context)
-    //     .getTransactions(widget.size)
-    //     .then((value) {
-    //   setState(() {
-    //     transactionList = value;
-    //   });
-    // });
 
     if (transactionList == null) {
       setTransactions();

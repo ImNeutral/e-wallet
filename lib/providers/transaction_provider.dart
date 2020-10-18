@@ -19,7 +19,7 @@ class TransactionProvider extends ChangeNotifier {
   void initUserTransactions() {
     _auth.authStateChanges().listen((event) {
       if (event != null) {
-        streamAllTransactions(event.uid).listen((_transactionList) {
+        streamAllTransactions().listen((_transactionList) {
           this.transactionList = _transactionList;
           notifyListeners();
         });
@@ -27,11 +27,11 @@ class TransactionProvider extends ChangeNotifier {
     });
   }
 
-  Stream<List<TransactionModel>> streamAllTransactions(String uid) {
+  Stream<List<TransactionModel>> streamAllTransactions() {
     var ref = _db.collection('transactions');
     return ref
-        .where('usersInTransaction', arrayContains: uid)
-        .limit(limit)
+        .where('usersInTransaction', arrayContains: _auth.currentUser.uid)
+        .orderBy('date_added', descending: true)
         .snapshots()
         .map((snap) => snap.docs
             .map((doc) => TransactionModel.fromFirestore(doc))
@@ -40,18 +40,33 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<List<TransactionModel>> getTransactions(int limit) {
     var ref = _db.collection('transactions');
+    if (limit >= 1) {
+      return ref
+          .where('usersInTransaction', arrayContains: _auth.currentUser.uid)
+          .limit(limit)
+          .orderBy('date_added', descending: true)
+          .get()
+          .then(
+            (snap) => snap.docs
+                .map((doc) => TransactionModel.fromFirestore(doc))
+                .toList(),
+          );
+    } else {
+      return getAllTransactions();
+    }
+  }
+
+  Future<List<TransactionModel>> getAllTransactions() {
+    var ref = _db.collection('transactions');
     return ref
         .where('usersInTransaction', arrayContains: _auth.currentUser.uid)
-        .limit(limit)
+        .orderBy('date_added', descending: true)
         .get()
         .then(
           (snap) => snap.docs
               .map((doc) => TransactionModel.fromFirestore(doc))
               .toList(),
         );
-    // .map((snap) => snap.docs
-    //     .map((doc) => TransactionModel.fromFirestore(doc))
-    //     .toList());
   }
 
   Future createTransaction(String from, String _description, int _amount,
