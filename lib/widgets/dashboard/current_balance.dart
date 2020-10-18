@@ -1,12 +1,13 @@
 import 'package:e_wallet/models/user_model.dart';
-import 'package:e_wallet/util/custom_number_format_util.dart';
+import 'package:e_wallet/providers/user_provider.dart';
+import 'package:e_wallet/util/custom_format_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CurrentBalance extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserModel>(context);
+    UserModel user = Provider.of<UserProvider>(context).userModel;
 
     return Center(
       child: new AspectRatio(
@@ -32,8 +33,7 @@ class CurrentBalance extends StatelessWidget {
                     ),
                     if (user != null) ...[
                       Text(
-                        CustomNumberFormatUtil()
-                            .formatIntAsCurrency(user.balance),
+                        CustomFormatUtil().formatIntAsCurrency(user.balance),
                         style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,

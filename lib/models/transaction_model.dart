@@ -7,6 +7,7 @@ class TransactionModel {
   final int amount;
   final Timestamp dateAdded;
   final String description;
+  final List usersInTransaction;
 
   TransactionModel({
     this.id,
@@ -15,6 +16,7 @@ class TransactionModel {
     this.amount,
     this.dateAdded,
     this.description,
+    this.usersInTransaction,
   });
 
   factory TransactionModel.fromFirestore(DocumentSnapshot doc) {
@@ -27,6 +29,7 @@ class TransactionModel {
       amount: _amount,
       dateAdded: data['date_added'],
       description: data['description'],
+      usersInTransaction: data['usersInTransaction'],
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-class CustomNumberFormatUtil {
+class CustomFormatUtil {
   final oCcy = new NumberFormat("#,###.00", "en_US");
   final amountMultiplier =
       0.01; // 1250 in database will be 12.50 (its real value)
@@ -20,5 +20,10 @@ class CustomNumberFormatUtil {
       retValue = oCcy.format(value * amountMultiplier);
     }
     return retValue;
+  }
+
+  String timeStampAsSimpleDate(DateTime date) {
+    final df = new DateFormat("MMM d, ''yy\nh:mm a");
+    return df.format(date);
   }
 }

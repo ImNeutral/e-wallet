@@ -10,19 +10,19 @@
   - [X] First and Last Name
   - [X] Email (in email format)
 - [X] The user should be able to login after successful registration via email and password
-- [ ] Upon login, the user should be able to see a dashboard on the first page
-  - [ ] Current balance of the wallet
-  - [ ] Option to add amount to the balance
+- [X] Upon login, the user should be able to see a dashboard on the first page
+  - [X] Current balance of the wallet
+  - [X] Option to add amount to the balance
   - [ ] Option to pay
-  - [ ] Transaction history (latest 5)
+  - [X] Transaction history (latest 5)
   - [ ] Menu Options
-    * [ ] Transaction History (Full list)
+    * [X] Transaction History (Full list)
     * [ ] Saved contact List
-    * [ ] Logout
-- [ ] Option to add amount to the balance
-  - [ ] Amount
-  - [ ] Description
-  - [ ] Date of Transaction (read-only)
+    * [X] Logout
+- [X] Option to add amount to the balance
+  - [X] Amount
+  - [X] Description
+  - [X] Date of Transaction (read-only)
 - [ ] Option to pay
   - [ ] Through QR code (or search inside contact list)
   - [ ] Amount

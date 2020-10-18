@@ -1,10 +1,8 @@
-import 'package:e_wallet/models/transaction_model.dart';
 import 'package:e_wallet/models/user_model.dart';
 import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/providers/user_provider.dart';
-import 'package:e_wallet/util/custom_number_format_util.dart';
+import 'package:e_wallet/util/custom_format_util.dart';
 import 'package:e_wallet/util/decimal_input_formatter.dart';
-import 'package:e_wallet/util/global_snackbar.dart';
 import 'package:e_wallet/validators/add_balance_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +26,7 @@ class _AddBalanceState extends State<AddBalance> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserModel>(context);
-
+    UserModel user = Provider.of<UserProvider>(context).userModel;
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Balance'),
@@ -48,8 +45,7 @@ class _AddBalanceState extends State<AddBalance> {
                     Text('Current Balance:'),
                     if (user != null) ...[
                       Text(
-                        CustomNumberFormatUtil()
-                            .formatIntAsCurrency(user.balance),
+                        CustomFormatUtil().formatIntAsCurrency(user.balance),
                       )
                     ]
                   ],
@@ -59,7 +55,7 @@ class _AddBalanceState extends State<AddBalance> {
                     Text('New Balance:'),
                     if (user != null) ...[
                       Text(
-                        CustomNumberFormatUtil().formatIntAsCurrencyAdd(
+                        CustomFormatUtil().formatIntAsCurrencyAdd(
                           user.balance,
                           amountIntValue,
                         ),
@@ -106,17 +102,6 @@ class _AddBalanceState extends State<AddBalance> {
                       )
                     ],
                     if (isLoading) ...[CircularProgressIndicator()],
-                    StreamBuilder<List<TransactionModel>>(
-                      stream: TransactionProvider().streamAllTransactions(),
-                      builder: (context, snapshot) {
-                        var data = snapshot.data;
-                        List<Widget> list = new List<Widget>();
-                        for (var i = 0; data != null && i < data.length; i++) {
-                          list.add(new Text(data[i].from));
-                        }
-                        return new Row(children: list);
-                      },
-                    ),
                   ]),
                 ),
               ],

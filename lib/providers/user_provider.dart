@@ -5,15 +5,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UserProvider {
+class UserProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  UserModel userModel;
 
   // Future<User> getUser(String id) async {
   //   var snap = await _db.collection('users').doc(id).get();
   //
   //   return User.fromFirestore(snap);
-  // }
+  // }\
+  UserProvider() {
+    setCurrentUser();
+  }
 
   Stream<UserModel> streamUser(String id) {
     return _db
@@ -29,11 +33,15 @@ class UserProvider {
         usersSnap.docs.map((doc) => UserModel.fromFirestore(doc)).toList());
   }
 
-  Stream<UserModel> currentUser() {
-    if (_auth.currentUser != null) {
-      return streamUser(_auth.currentUser.uid);
-    }
-    return null;
+  void setCurrentUser() {
+    _auth.authStateChanges().listen((event) {
+      if (event != null) {
+        streamUser(event.uid).listen((_userModel) {
+          this.userModel = _userModel;
+          notifyListeners();
+        });
+      }
+    });
   }
 
   Future addBalance(UserModel user, int balance) async {

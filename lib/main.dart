@@ -1,8 +1,10 @@
 import 'package:e_wallet/models/user_model.dart';
+import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/providers/user_provider.dart';
 import 'package:e_wallet/screens/add_balance_screen.dart';
 import 'package:e_wallet/screens/auth_screen.dart';
 import 'package:e_wallet/screens/dashboard_screen.dart';
+import 'package:e_wallet/screens/transaction_history_screen..dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,7 +14,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final UserProvider userService = new UserProvider();
-  //final TransactionProvider transactionProvider = new TransactionProvider();
 
   runApp(MultiProvider(
     providers: [
@@ -22,9 +23,12 @@ void main() async {
       StreamProvider<User>.value(
         value: FirebaseAuth.instance.authStateChanges(),
       ),
-      StreamProvider<UserModel>.value(
-        value: UserProvider().currentUser(),
-      )
+      ChangeNotifierProvider<UserProvider>(
+        create: (_) => UserProvider(),
+      ),
+      ChangeNotifierProvider<TransactionProvider>(
+        create: (_) => TransactionProvider(),
+      ),
     ],
     child: MyApp(),
   ));
@@ -37,13 +41,14 @@ class MyApp extends StatelessWidget {
     var isLoggedIn = user != null && user.emailVerified;
 
     return MaterialApp(
-      title: 'Flutter Start',
+      title: 'E Wallet',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: (isLoggedIn ? DashboardScreen() : AuthScreen()),
       routes: {
         AddBalance().routeName: (context) => AddBalance(),
+        TransactionHistory().routeName: (context) => TransactionHistory(),
       },
     );
   }
