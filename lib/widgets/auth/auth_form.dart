@@ -135,13 +135,22 @@ class _AuthFormState extends State<AuthForm> {
       setIsLoading(true);
       AuthProvider()
           .register(
-            _firstNameController.text,
-            _lastNameController.text,
-            _emailController.text,
-            _passwordController.text,
-            context,
-          )
-          .whenComplete(() => setIsLoading(false));
+        _firstNameController.text,
+        _lastNameController.text,
+        _emailController.text,
+        _passwordController.text,
+        context,
+      )
+          .whenComplete(() {
+        setIsLoading(false);
+        setState(() {
+          isRegistration = false;
+        });
+        _firstNameController.text = '';
+        _lastNameController.text = '';
+        _emailController.text = '';
+        _passwordController.text = '';
+      });
     }
   }
 

@@ -11,6 +11,9 @@ import 'package:qrscan/qrscan.dart' as scanner;
 
 class Pay extends StatefulWidget {
   final String routeName = '/send-money';
+  final String sendToAddress;
+
+  Pay([this.sendToAddress = '']);
 
   @override
   _PayState createState() => _PayState();
@@ -23,6 +26,7 @@ class _PayState extends State<Pay> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _sendToController = TextEditingController();
 
+  bool addToContacts = false;
   bool confirmSend = false;
   bool isLoading = false;
   int amountIntValue = 0;
@@ -31,6 +35,12 @@ class _PayState extends State<Pay> {
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).userModel;
+    var sendToArg = ModalRoute.of(context).settings.arguments;
+    if (_sendToController.text == null ||
+        _sendToController.text.length == 0 &&
+            _sendToController.text != sendToArg) {
+      _sendToController.text = ModalRoute.of(context).settings.arguments;
+    }
 
     return Scaffold(
       key: parentContext,
@@ -65,8 +75,13 @@ class _PayState extends State<Pay> {
                             controller: _sendToController,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                              labelText: 'Pay to',
+                              labelText: 'Send to',
                             ),
+                            onChanged: (value) {
+                              setState(() {
+                                addToContacts = false;
+                              });
+                            },
                             validator: (value) {
                               return AddBalanceValidator()
                                   .sendTo(_sendToController.text);
@@ -90,6 +105,19 @@ class _PayState extends State<Pay> {
                         ),
                       ],
                     ),
+                    if (_sendToController.text.length > 0 &&
+                        !user.contactList.contains(_sendToController.text)) ...[
+                      CheckboxListTile(
+                        title: Text("Add To Contacts"),
+                        value: addToContacts,
+                        onChanged: (newValue) {
+                          setState(() {
+                            addToContacts = newValue;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+                    ],
                     TextFormField(
                       controller: _amountController,
                       keyboardType:
@@ -119,6 +147,8 @@ class _PayState extends State<Pay> {
                     if (!isLoading) ...[
                       RaisedButton(
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
+
                           if (_addBalanceFormKey.currentState.validate()) {
                             showDialog(
                               context: context,
@@ -128,7 +158,7 @@ class _PayState extends State<Pay> {
                             );
                           }
                         },
-                        child: Text('Pay Amount'),
+                        child: Text('Send Money'),
                       )
                     ],
                     if (isLoading) ...[CircularProgressIndicator()],
@@ -155,8 +185,6 @@ class _PayState extends State<Pay> {
   void paySubmitForm() {
     if (_addBalanceFormKey.currentState.validate() && confirmSend) {
       setIsLoading(true);
-      parentContext.currentState
-          .showSnackBar(SnackBar(content: Text('Transaction Successful!')));
       UserProvider()
           .sendMoney(user, amountIntValue, _sendToController.text,
               _descriptionController.text)
@@ -164,7 +192,12 @@ class _PayState extends State<Pay> {
         if (value.length > 0) {
           parentContext.currentState
               .showSnackBar(SnackBar(content: Text(value[0])));
+          setIsLoading(false);
         } else {
+          if (addToContacts) {
+            user.contactList.add(_sendToController.text);
+            UserProvider().updateUser(user);
+          }
           parentContext.currentState
               .showSnackBar(SnackBar(content: Text('Transaction Successful!')));
           await Future.delayed(Duration(seconds: 1));
@@ -195,7 +228,7 @@ class _PayState extends State<Pay> {
     _sendToController.text = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ContactListScreen(),
+        builder: (context) => ContactListScreen(true),
       ),
     );
   }
@@ -204,7 +237,6 @@ class _PayState extends State<Pay> {
     Widget cancelButton = RaisedButton(
       child: Text("Cancel"),
       onPressed: () {
-        // Navigator.pop(context, false);
         confirmSendState(false);
         Navigator.of(context, rootNavigator: false).pop();
       },
@@ -212,7 +244,6 @@ class _PayState extends State<Pay> {
     Widget yesButton = FlatButton(
       child: Text("Send"),
       onPressed: () {
-        // Navigator.pop(context, false);
         confirmSendState(true);
         paySubmitForm();
         Navigator.of(context, rootNavigator: false).pop();

@@ -28,6 +28,6 @@
   - [X] Amount
   - [X] Description
   - [X] Date of Transaction (read-only)
-- [ ] Saved Contact List
-  - [ ] The user should have an option to save users to the contact list after the payment has been made for easy future transactions
-  - [ ] The list should contain option to pay again to that person
+- [X] Saved Contact List
+  - [X] The user should have an option to save users to the contact list after the payment has been made for easy future transactions
+  - [X] The list should contain option to pay again to that person

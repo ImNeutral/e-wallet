@@ -1,11 +1,11 @@
-import 'package:e_wallet/models/user_model.dart';
-import 'package:e_wallet/providers/user_provider.dart';
 import 'package:e_wallet/widgets/contact_list/contact_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ContactListScreen extends StatefulWidget {
   final String routeName = '/contact-list';
+  final bool returnData;
+
+  ContactListScreen([this.returnData = false]);
 
   @override
   _ContactListScreenState createState() => _ContactListScreenState();
@@ -22,7 +22,7 @@ class _ContactListScreenState extends State<ContactListScreen> {
       body: Builder(builder: (context) {
         return Padding(
           padding: EdgeInsets.all(20),
-          child: ContactList(),
+          child: ContactList(widget.returnData),
         );
       }),
     );

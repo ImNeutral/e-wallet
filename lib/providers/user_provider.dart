@@ -63,10 +63,11 @@ class UserProvider extends ChangeNotifier {
             .limit(1)
             .get()
             .then((value) {
-          if (value.docs.length > 0) {
+          if (_amount > user.balance) {
+            errors.add('Not enough balance to send.');
+          } else if (value.docs.length > 0) {
             UserModel payToUser = UserModel.fromFirestore(value.docs[0]);
             payToUser.addBalance(_amount);
-            print(payToUser.objectToMap());
             user.subtractBalance(_amount);
             updateUser(payToUser);
             updateUser(user);
