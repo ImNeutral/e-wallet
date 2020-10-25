@@ -13,11 +13,11 @@
 - [X] Upon login, the user should be able to see a dashboard on the first page
   - [X] Current balance of the wallet
   - [X] Option to add amount to the balance
-  - [ ] Option to pay
+  - [X] Option to pay
   - [X] Transaction history (latest 5)
   - [X] Menu Options
     * [X] Transaction History (Full list)
-    * [ ] Saved contact List
+    * [X] Saved contact List
     * [X] Logout
 - [X] Option to add amount to the balance
   - [X] Amount
