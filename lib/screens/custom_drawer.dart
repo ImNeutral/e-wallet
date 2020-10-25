@@ -1,4 +1,5 @@
 import 'package:e_wallet/providers/auth_provider.dart';
+import 'package:e_wallet/screens/contact_list_screen.dart';
 import 'package:e_wallet/screens/transaction_history_screen..dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +34,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.contacts),
             onTap: () {
               Navigator.pop(context);
-              // Update the state of the app.
-              // ...
+              Navigator.pushNamed(context, ContactListScreen().routeName);
             },
           ),
           ListTile(

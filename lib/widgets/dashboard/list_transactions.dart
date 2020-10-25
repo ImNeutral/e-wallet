@@ -1,4 +1,3 @@
-import 'package:e_wallet/models/transaction_model.dart';
 import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/util/custom_format_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,16 +13,6 @@ class ListTransactions extends StatefulWidget {
 }
 
 class _ListTransactionsState extends State<ListTransactions> {
-  List<TransactionModel> transactionList;
-
-  void setTransactions() {
-    TransactionProvider().getTransactions(widget.size).then((value) => {
-          setState(() {
-            transactionList = value;
-          })
-        });
-  }
-
   bool isDebit(String moneyFrom) {
     return moneyFrom == FirebaseAuth.instance.currentUser.uid;
   }
@@ -32,62 +21,67 @@ class _ListTransactionsState extends State<ListTransactions> {
     return isDebit(moneyFrom) ? Colors.red : Colors.blue;
   }
 
+  int listViewSize(int listSize, int declaredSize) {
+    int listViewSize = 0;
+    if (declaredSize != 0 && listSize >= declaredSize) {
+      listViewSize = declaredSize;
+    } else {
+      listViewSize = listSize;
+    }
+    return listViewSize;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Provider.of<TransactionProvider>(context)
-
-    if (transactionList == null) {
-      setTransactions();
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    return RefreshIndicator(
-      onRefresh: () async {
-        setTransactions();
-        return null;
-      },
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: transactionList.length,
-        itemBuilder: (context, i) {
-          return Column(
-            children: [
-              Divider(),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return StreamBuilder(
+        stream:
+            Provider.of<TransactionProvider>(context).streamAllTransactions(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return CircularProgressIndicator();
+          } else {
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: listViewSize(snapshot.data.length, widget.size),
+              itemBuilder: (context, i) {
+                return Column(
                   children: [
-                    Text(
-                      CustomFormatUtil().timeStampAsSimpleDate(
-                          transactionList[i].dateAdded.toDate()),
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 15, right: 15),
-                        child: Text(
-                          transactionList[i].description,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                    Divider(),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            CustomFormatUtil().timeStampAsSimpleDate(
+                                snapshot.data[i].dateAdded.toDate()),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15, right: 15),
+                              child: Text(
+                                snapshot.data[i].description,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          if (isDebit(snapshot.data[i].from)) ...[Text('-')],
+                          Text(
+                            CustomFormatUtil()
+                                .formatIntAsCurrency(snapshot.data[i].amount),
+                            style: TextStyle(
+                                color: amountColor(snapshot.data[i].from)),
+                          ),
+                        ],
                       ),
                     ),
-                    if (isDebit(transactionList[i].from)) ...[Text('-')],
-                    Text(
-                      CustomFormatUtil()
-                          .formatIntAsCurrency(transactionList[i].amount),
-                      style: TextStyle(
-                          color: amountColor(transactionList[i].from)),
-                    ),
                   ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+                );
+              },
+            );
+          }
+        });
   }
 }

@@ -1,5 +1,7 @@
 import 'package:e_wallet/screens/add_balance_screen.dart';
 import 'package:e_wallet/screens/custom_drawer.dart';
+import 'package:e_wallet/screens/my_qr_code_screen.dart';
+import 'package:e_wallet/screens/send_money_screen.dart';
 import 'package:e_wallet/widgets/dashboard/current_balance.dart';
 import 'package:e_wallet/widgets/dashboard/list_transactions.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,10 +32,23 @@ class DashboardScreen extends StatelessWidget {
             ),
             Card(
               child: ListTile(
-                title: Text('Pay'),
+                title: Text('Send Money'),
                 leading: Icon(Icons.payment),
                 trailing: Icon(Icons.arrow_right),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, Pay().routeName);
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                title: Text('My QR Code'),
+                leading:
+                    Image.asset("assets/images/icons/qr_code_lead_trail.png"),
+                trailing: Icon(Icons.arrow_right),
+                onTap: () {
+                  Navigator.pushNamed(context, MyQrCode().routeName);
+                },
               ),
             ),
             Card(

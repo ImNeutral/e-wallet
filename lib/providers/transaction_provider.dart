@@ -69,17 +69,17 @@ class TransactionProvider extends ChangeNotifier {
         );
   }
 
-  Future createTransaction(String from, String _description, int _amount,
-      BuildContext context) async {
+  Future createTransaction(
+      String from, String to, String _description, int _amount) async {
     var ref = _db.collection('transactions');
     await ref.doc().set({
       'from': from,
-      'to': _auth.currentUser.uid,
+      'to': to,
       'amount': _amount,
       'date_added': DateTime.now(),
       'description': _description,
-      'usersInTransaction': [from, _auth.currentUser.uid],
-    }).whenComplete(() => Show(context, 'Balance Successfully added!'));
+      'usersInTransaction': [from, to],
+    });
   }
 
   void addLimit(int _limit) {

@@ -14,4 +14,12 @@ class AddBalanceValidator {
     }
     return _error;
   }
+
+  String sendTo(String _value) {
+    String _error;
+    if (_value.isEmpty) {
+      _error = 'Please enter the your receiver.';
+    }
+    return _error;
+  }
 }

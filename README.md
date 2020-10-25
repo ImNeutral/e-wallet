@@ -15,7 +15,7 @@
   - [X] Option to add amount to the balance
   - [ ] Option to pay
   - [X] Transaction history (latest 5)
-  - [ ] Menu Options
+  - [X] Menu Options
     * [X] Transaction History (Full list)
     * [ ] Saved contact List
     * [X] Logout
@@ -23,11 +23,11 @@
   - [X] Amount
   - [X] Description
   - [X] Date of Transaction (read-only)
-- [ ] Option to pay
-  - [ ] Through QR code (or search inside contact list)
-  - [ ] Amount
-  - [ ] Description
-  - [ ] Date of Transaction (read-only)
+- [X] Option to pay
+  - [X] Through QR code (or search inside contact list)
+  - [X] Amount
+  - [X] Description
+  - [X] Date of Transaction (read-only)
 - [ ] Saved Contact List
   - [ ] The user should have an option to save users to the contact list after the payment has been made for easy future transactions
   - [ ] The list should contain option to pay again to that person

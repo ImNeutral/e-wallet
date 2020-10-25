@@ -3,7 +3,10 @@ import 'package:e_wallet/providers/transaction_provider.dart';
 import 'package:e_wallet/providers/user_provider.dart';
 import 'package:e_wallet/screens/add_balance_screen.dart';
 import 'package:e_wallet/screens/auth_screen.dart';
+import 'package:e_wallet/screens/contact_list_screen.dart';
 import 'package:e_wallet/screens/dashboard_screen.dart';
+import 'package:e_wallet/screens/my_qr_code_screen.dart';
+import 'package:e_wallet/screens/send_money_screen.dart';
 import 'package:e_wallet/screens/transaction_history_screen..dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,9 @@ class MyApp extends StatelessWidget {
       routes: {
         AddBalance().routeName: (context) => AddBalance(),
         TransactionHistory().routeName: (context) => TransactionHistory(),
+        Pay().routeName: (context) => Pay(),
+        MyQrCode().routeName: (context) => MyQrCode(),
+        ContactListScreen().routeName: (context) => ContactListScreen(),
       },
     );
   }

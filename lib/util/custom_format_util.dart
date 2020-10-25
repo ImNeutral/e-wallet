@@ -26,4 +26,9 @@ class CustomFormatUtil {
     final df = new DateFormat("MMM d, ''yy\nh:mm a");
     return df.format(date);
   }
+
+  String timeStampAsShortDate(DateTime date) {
+    final df = new DateFormat("MMMM d, yyyy");
+    return df.format(date);
+  }
 }

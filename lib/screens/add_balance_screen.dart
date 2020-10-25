@@ -69,7 +69,10 @@ class _AddBalanceState extends State<AddBalance> {
                     Row(
                       children: [
                         Text('Transaction Date:'),
-                        Text('April 12, 2020')
+                        Text(
+                          CustomFormatUtil()
+                              .timeStampAsShortDate(DateTime.now()),
+                        )
                       ],
                     ),
                     TextFormField(
@@ -94,6 +97,9 @@ class _AddBalanceState extends State<AddBalance> {
                       validator: (value) {
                         return AddBalanceValidator().description(value);
                       },
+                    ),
+                    Container(
+                      height: 20,
                     ),
                     if (!isLoading) ...[
                       RaisedButton(
@@ -130,9 +136,9 @@ class _AddBalanceState extends State<AddBalance> {
       TransactionProvider()
           .createTransaction(
         from,
+        user.id,
         _descriptionController.text,
         amountIntValue,
-        context,
       )
           .whenComplete(
         () async {
