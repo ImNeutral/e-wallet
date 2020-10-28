@@ -38,7 +38,7 @@ class _ListTransactionsState extends State<ListTransactions> {
             Provider.of<TransactionProvider>(context).streamAllTransactions(),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           } else {
             return ListView.builder(
               shrinkWrap: true,
